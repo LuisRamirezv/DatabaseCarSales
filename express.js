@@ -56,9 +56,6 @@ app.get('/', function(req, res){
 
 })
 
-
-
-
 // Create a POST method to send the information to the database
 // WHen should this method be executed?
 
@@ -105,36 +102,7 @@ app.post('/submit', function(req, res){
 //      We print an alert to the user
         return res.send("Please try again make sure to fill out all the information");
     }  
-
-
-
-
-
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // Create a port to establish a pathway for communication 
