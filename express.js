@@ -37,24 +37,25 @@ app.get('/', function(req, res){
         // and sends it to the client through a response
         // THe first argument is the location/ url of the file
 //      __dirname == C:/users/user/Desktop/..
-        res.sendFile(__dirname + '/form.html');
+        res.sendFile(__dirname + '/form/form.html');
 
     // Get the database info 
     // Creat a variable that will contain the query
-     //let sql = "SELECT * FROM mysql_table"; // this will be ran in mysql workbench
+    // let sql = "SELECT * FROM mysql_table"; // this will be ran in mysql workbench
     
     // // Pass in the connection and send the information to rescieve the respons
-    //connection.query(sql, function(err, results){
+    // connection.query(sql, function(err, results){
     //     // Catch errors and throw them 
-         //if(err) throw err; // If error throw error 
+    //     if(err) throw err; // If error throw error 
         
-         //res.send(results); // Otherwise send the results 
+    //     res.send(results); // Otherwise send the results 
     // })
 
 
-     //res.send("Port is working ok!");
+    // res.send("Port is working ok!");
 
 })
+
 
 // Create a POST method to send the information to the database
 // WHen should this method be executed?
@@ -82,7 +83,7 @@ app.post('/submit', function(req, res){
             // So assuming now we have the correct information we need to insert his information
             // Into the db
 // INSERT INTO `mysql_db`.`mysql_table` (`full_name`, `email`, `gender`, `password`) VALUES ('Tom', 'Tom', 'AA', 'Meh');
-        const sql = "INSERT INTO mysql_table_2 (first_name, second_name, role, password) VALUES (?,?,?,?)";
+        const sql = "INSERT INTO mysql_table (first_name, second_name, role, password) VALUES (?,?,?,?)";
         // ANy command from Mysql can be used as a query
         connection.query(sql, [firstname, lastname, userType, password], function(err,results){
 
@@ -94,7 +95,7 @@ app.post('/submit', function(req, res){
                     return res.send("Err: Could not insert information into the database!")
                 }
                 // if all goes ok we will do the following
-                res.redirect("/home.html");
+                res.redirect("/form/home.html");
         });
 
     }else{
@@ -102,7 +103,13 @@ app.post('/submit', function(req, res){
 //      We print an alert to the user
         return res.send("Please try again make sure to fill out all the information");
     }  
+
+
+
+
+
 });
+
 
 
 // Create a port to establish a pathway for communication 
