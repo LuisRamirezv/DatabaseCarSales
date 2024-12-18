@@ -6,6 +6,7 @@
 
 // Import the express framework 
 var express = require("express");
+const path = require("path");
 
 // Create the instance of the object 
 // This will allow us to access the methods
@@ -60,56 +61,47 @@ app.get('/', function(req, res){
 // Create a POST method to send the information to the database
 // WHen should this method be executed?
 
-app.post('/submit', function(req, res){
-// Any information from the form once the form is complete and submitted
-// The infomation will get transmitted through the /submit path
-    
-    //construct the body of the request to send in the /submit
-    const {firstname, lastname, userType, password} = req.body;
-
-    // The password must be validated 
-
-    if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(password)){
-
-        // Test the pasword for a criteria 
-        return res.send("Password must contain Small letters capital letters and numbers!")
-        
+app.post('/submit', function(req, res) {
+    // Destructure the data coming from the form
+    const { firstname, lastname, email, phone, eircode } = req.body;
+  
+    // Validate first name (alphanumeric, max length 20)
+    if (!/^[a-zA-Z0-9]{1,20}$/.test(firstname)) {
+      return res.send("First name must be alphanumeric and no longer than 20 characters.");
     }
-    
-    if(firstname, lastname, password){
-
-            // If all fields are present and correctly filled out 
-            // we will send this information to the databse
-            // So assuming now we have the correct information we need to insert his information
-            // Into the db
-// INSERT INTO `mysql_db`.`mysql_table` (`full_name`, `email`, `gender`, `password`) VALUES ('Tom', 'Tom', 'AA', 'Meh');
-        const sql = "INSERT INTO mysql_table (first_name, second_name, role, password) VALUES (?,?,?,?)";
-        // ANy command from Mysql can be used as a query
-        connection.query(sql, [firstname, lastname, userType, password], function(err,results){
-
-                // if(err) throw err;
-                if(err){
-                    // Dtabase errors insertion errors or mismatched data types
-                    console.error("Error Inserting into database: ", err);
-                    // server error message
-                    return res.send("Err: Could not insert information into the database!")
-                }
-                // if all goes ok we will do the following
-                res.redirect("/form/home.html");
-        });
-
-    }else{
-//      If the information in the form is not fully filled out 
-//      We print an alert to the user
-        return res.send("Please try again make sure to fill out all the information");
-    }  
-
-
-
-
-
-});
-
+  
+    // Validate last name (alphanumeric, max length 20)
+    if (!/^[a-zA-Z0-9]{1,20}$/.test(lastname)) {
+      return res.send("Last name must be alphanumeric and no longer than 20 characters.");
+    }
+  
+    // Validate email (must contain @ symbol and proper format)
+    if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+      return res.send("Email must contain the @ symbol and be in a valid format.");
+    }
+  
+    // Validate phone number (exactly 10 digits)
+    if (!/^\d{10}$/.test(phone)) {
+      return res.send("Phone number must contain exactly 10 digits and only numbers.");
+    }
+  
+    // Validate eircode (must start with a number, alphanumeric, length 6)
+    if (!/^[0-9][a-zA-Z0-9]{5}$/.test(eircode)) {
+      return res.send("Eircode must start with a number, be alphanumeric, and have a length of 6 characters.");
+    }
+  
+    // If all fields are valid, proceed to insert the data into the database
+    const sql = "INSERT INTO mysql_tabledb (first_name, last_name, email, phone, eircode) VALUES (?,?,?,?,?)";
+    connection.query(sql, [firstname, lastname, email, phone, eircode], function(err, results) {
+      if (err) {
+        console.error("Error Inserting into database: ", err);
+        return res.send("Error: Could not insert information into the database!");
+      }
+      // If insertion is successful, redirect to home page
+      res.redirect("/form/home.html");
+    });
+  });
+  
 
 
 // Create a port to establish a pathway for communication 
