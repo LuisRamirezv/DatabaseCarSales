@@ -4,18 +4,16 @@
 //  Of sending and recieving information 
 //  From the client to the server application
 
-// Import the express framework 
+// Import the express framework  
 var express = require("express");
-const path = require("path");
 
 // Create the instance of the object 
 // This will allow us to access the methods
 var app = express();
 
-
 // Import the database 
-// This will allow me to connect to the database using the info 
-
+// This will allow me to connect to the database using the info
+// Sharing the connection usign "module.exports = connection;"" from database.js
 var connection = require("./database")
 
 // Now we need to give access to the styling and other associated files
@@ -24,10 +22,11 @@ app.use(express.static(__dirname));
 // Establish a method to serve the commincation between these files
 app.use(express.urlencoded({extended:true}));
 
-//```````````````````````
+//#################################### MIDDLEWARE CHECK ###########################################
+
 // Middleware to check if the specified port is open
 app.use((req, res, next) => {
-    const port = 3000;
+    const port = 3001;
     const net = require('net');
     const server = net.createServer();
 
@@ -58,8 +57,9 @@ app.use((req, res, next) => {
         next(); // Proceed to the next middleware
     });
 });
-//``````````````````````
+//#################################### MIDDLEWARE CHECK ###########################################
 
+//############################## REQUEST DATA FROM THE SERVER #####################################
 // Now that the port is established we can create a response to the client 
 // This get method will recieve or get the response and send it to the client 
 
@@ -68,38 +68,25 @@ app.use((req, res, next) => {
 // THe next step is to connect the server to the form page 
 app.get('/', function(req, res){
 
-        // Serve the form from the client 
-        // In response we pass in the location of the form
-        // This way the server app gets the form from the local storage
-        // and sends it to the client through a response
-        // THe first argument is the location/ url of the file
-//      __dirname == C:/users/user/Desktop/..
-        res.sendFile(__dirname + '/form/form.html');
+        // We use this method to request data from the server without modifying it
+        // Defining endpoints, with this method we cna define specific routes (urls)
+        // That this application should respond to when a GET request is made
 
-    // Get the database info 
-    // Creat a variable that will contain the query
-    // let sql = "SELECT * FROM mysql_table"; // this will be ran in mysql workbench
-    
-    // // Pass in the connection and send the information to rescieve the respons
-    // connection.query(sql, function(err, results){
-    //     // Catch errors and throw them 
-    //     if(err) throw err; // If error throw error 
-        
-    //     res.send(results); // Otherwise send the results 
-    // })
-
-
-    // res.send("Port is working ok!");
+        res.sendFile(__dirname + '/form.html');
+        // We use the form.html file as a response to an HTTP request.
 
 })
+//############################## REQUEST DATA FROM THE SERVER #####################################
 
+//############################## SENDING DATA FROM THE SERVER #####################################
 
 // Create a POST method to send the information to the database
-// WHen should this method be executed?
+// this method handles HTTP POST request sent to the /submit endpoint.
 
 app.post('/submit', function(req, res) {
+
     // Destructure the data coming from the form
-    const { firstname, lastname, email, phone, eircode } = req.body;
+    const { firstname, lastname, email, phone, age, eircode } = req.body;
   
     // Validate first name (alphanumeric, max length 20)
     if (!/^[a-zA-Z0-9]{1,20}$/.test(firstname)) {
@@ -120,6 +107,11 @@ app.post('/submit', function(req, res) {
     if (!/^\d{10}$/.test(phone)) {
       return res.send("Phone number must contain exactly 10 digits and only numbers.");
     }
+
+    // Validate phone number (exactly 10 digits)
+    if (!/^(1[89]|[2-6][0-9])$/.test(age)) {
+      return res.send("The age must be over 18 and under 70");
+    }
   
     // Validate eircode (must start with a number, alphanumeric, length 6)
     if (!/^[0-9][a-zA-Z0-9]{5}$/.test(eircode)) {
@@ -127,42 +119,28 @@ app.post('/submit', function(req, res) {
     }
   
     // If all fields are valid, proceed to insert the data into the database
-    const sql = "INSERT INTO mysql_tabledb (first_name, last_name, email, phone, eircode) VALUES (?,?,?,?,?)";
-    connection.query(sql, [firstname, lastname, email, phone, eircode], function(err, results) {
+    const sql = "INSERT INTO mysql_table (first_name, last_name, email, phone, age, eircode) VALUES (?,?,?,?,?,?)";
+    connection.query(sql, [firstname, lastname, email, phone, age, eircode], function(err, results) {
       if (err) {
         console.error("Error Inserting into database: ", err);
         return res.send("Error: Could not insert information into the database!");
       }
       // If insertion is successful, redirect to home page
-      res.redirect("/form/home.html");
+      res.redirect("/home.html");
     });
   });
   
+//############################## SENDING DATA FROM THE SERVER #####################################
 
+//############################## LISTEN FOR INCOMING REQUEST #####################################
 
-// Create a port to establish a pathway for communication 
 // This port will handle the traffic to and from the server application and client 
 // TO open a port we will access the app variable
 app.listen("3000", function(){
 
-    //connect to a database and give th status
-    connection.connect(function(err){
-        // Catch error if error
-        if(err) throw err;
-
-        console.log("Database Connected");
-    })
-
-
-    // Send a message and check if the message is recieved by the client 
-    console.log("App connected to port 3000"); // terminal response
+  // Send a message and check if the message is recieved by the client 
+    console.log("Connection port: connected to port 3000"); // terminal response
 
 })
 
-
-
-
-
-
-
-
+//############################## LISTEN FOR INCOMING REQUEST #####################################

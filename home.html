@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Sale Company</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1rem;
+            position: absolute;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        /* Main Message Box */
+        .message-box {
+            text-align: center;
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+        }
+
+        .message-box h2 {
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .message-box p {
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Button Styles */
+        .message-box button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .message-box button:hover {
+            background-color: #45a049;
+        }
+
+        /* Footer Styles */
+        footer {
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            padding: 1rem;
+            background-color: #333;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Car Sale Company</h1>
+        <p>Fill out the form below, and we'll get back to you soon!</p>
+    </header>
+    <div class="message-box">
+        <h2>Thank You!</h2>
+        <p>We have received your information. One of our agents will contact you shortly to assist with your car sale inquiry.</p>
+        <button onclick="goBack()">Back to Home</button>
+    </div>
+    <footer>
+        &copy; 2024 Car Sale Company. All Rights Reserved.
+    </footer>
+    <script src="home_script.js"></script>
+</body>
+</html>
