@@ -24,6 +24,42 @@ app.use(express.static(__dirname));
 // Establish a method to serve the commincation between these files
 app.use(express.urlencoded({extended:true}));
 
+//```````````````````````
+// Middleware to check if the specified port is open
+app.use((req, res, next) => {
+    const port = 3000;
+    const net = require('net');
+    const server = net.createServer();
+
+    server.once('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            return res.status(503).send(`Error: Port ${port} is already in use.`);
+        }
+        next(err); // Pass any unexpected errors to the error-handling middleware
+    });
+
+    server.once('listening', () => {
+        server.close();
+        next(); // Proceed to the next middleware
+    });
+
+    server.listen(port);
+});
+
+// Middleware to ensure the database schema is correct
+app.use((req, res, next) => {
+    const sql = "DESCRIBE mysql_table"; // Check the table schema
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error("Database schema verification failed:", err);
+            return res.status(500).send("Error: Database schema is not correctly configured.");
+        }
+        console.log("Database schema validated successfully.");
+        next(); // Proceed to the next middleware
+    });
+});
+//``````````````````````
+
 // Now that the port is established we can create a response to the client 
 // This get method will recieve or get the response and send it to the client 
 
