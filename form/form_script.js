@@ -1,63 +1,47 @@
-function validateUserInput(){
+  function validateUserInput(event) {
 
-// There are a couple of input fields in the form 
-// We must validate all user inputs 
+  // Retrieve input values
+  const firstname = document.getElementById("firstname").value;
+  const lastname = document.getElementById("lastname").value;
+  const email = document.getElementById("email").value;
+  const phone = document.getElementById("phone").value;
+  const eircode = document.getElementById("eircode").value;
 
-// Documtent object model
-// This DOM API will structure the HTML file
-// and allow us to get elements 
+  // Validate first name (alphanumeric, max length 20)
+  if (!/^[a-zA-Z0-9]{1,20}$/.test(firstname)) {
+  alert("First name must be alphanumeric and no longer than 20 characters.");
+  event.preventDefault(); // Prevent form submission
+  return;
+  }
 
-// Document contains all the html elements 
-// We could iterate through these elements one by one
-// Or we could return a specific element using the id
-// once we have this element we can access the value 
-const firstName = document.getElementById("firstname").value;
-const lastName = document.getElementById("lastname").value;
-const password = document.getElementById("password").value;
-const userType = document.getElementById("userType").value;
+  // Validate last name (alphanumeric, max length 20)
+  if (!/^[a-zA-Z0-9]{1,20}$/.test(lastname)) {
+  alert("Last name must be alphanumeric and no longer than 20 characters.");
+  event.preventDefault(); // Prevent form submission
+  return;
+  }
 
+  // Validate email (must contain @ symbol and proper format)
+  if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+  alert("Email must contain the @ symbol and be in a valid format.");
+  event.preventDefault(); // Prevent form submission
+  return;
+  }
 
+  // Validate phone number (exactly 10 digits)
+  if (!/^\d{10}$/.test(phone)) {
+  alert("Phone number must contain exactly 10 digits and only numbers.");
+  event.preventDefault(); // Prevent form submission
+  return;
+  }
 
+  // Validate eircode (must start with a number, alphanumeric, length 6)
+  if (!/^[0-9][a-zA-Z0-9]{5}$/.test(eircode)) {
+  alert("Eircode must start with a number, be alphanumeric, and have a length of 6 characters.");
+  event.preventDefault(); // Prevent form submission
+  return;
+  }
 
-// To process the password 
-// shift + 6 == ^
-if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(password)){
+  // If all fields are valid, submit the form
 
-    // Test the pasword for a criteria 
-    alert("Password must contain Small letters capital letters and numbers!")
-    
-}           
-
-// We need to test the first name last name and usertype
-
-
-if(firstName && lastName && password){
-
-    // If all three exist we must check the usertype
-    if(userType == "Student"){
-        // If this is not a student (Teacher) let them in 
-        // Route the user (Teacher) to the home page 
-
-        window.location.href = "home.html";
-
-    }else{
-        // If the user is not a teacher 
-        // We canot let them in 
-        // We throw an alert
-        alert("Sorry, unable to grant you access! Only Teachers allowed.")
-    }
-
-}else{
-
-    // If the inputs were not fully presented 
-    // We need to let the user know to enter them again
-    alert("Error: unable to sign you in, please make sure all fields are corretly filled out!")
-}
-
-
-
-
-
-}
-
-
+  }
